@@ -20,7 +20,7 @@ xkbcommon = dependency('xkbcommon')
 
 subdir('protocol')
 
-libslurp = library(
+libslurp = static_library(
 	'slurp',
 	[
 		'slurp.c',
@@ -46,6 +46,13 @@ executable(
 	link_with: libslurp,
 	include_directories: 'include',
 	install: true,
+)
+
+install_headers([
+	'include/slurp.h',
+	'include/pool-buffer.h'
+	],
+	subdir : 'slurp'
 )
 
 scdoc = find_program('scdoc', required: get_option('man-pages'))
