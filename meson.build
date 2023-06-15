@@ -17,6 +17,7 @@ wayland_client = dependency('wayland-client')
 wayland_cursor = dependency('wayland-cursor')
 wayland_protos = dependency('wayland-protocols', version: '>=1.14')
 xkbcommon = dependency('xkbcommon')
+pkgcfg = import('pkgconfig')
 
 subdir('protocol')
 
@@ -49,6 +50,7 @@ executable(
 )
 
 install_headers('include/slurp.h', subdir : 'slurp')
+pkgcfg.generate(libslurp)
 
 scdoc = find_program('scdoc', required: get_option('man-pages'))
 
