@@ -9,10 +9,10 @@
 #include <xkbcommon/xkbcommon.h>
 #include <linux/input-event-codes.h>
 
-#include "pool-buffer.h"
 #include "wlr-layer-shell-unstable-v1-client-protocol.h"
 #include "xdg-output-unstable-v1-client-protocol.h"
 
+#include "pool-buffer.h"
 #include "slurp.h"
 #include "render.h"
 
@@ -519,6 +519,11 @@ static void create_output(struct slurp_state *state,
 		fprintf(stderr, "allocation failed\n");
 		return;
 	}
+	output->buffers = calloc(2, sizeof(*output->buffers));
+	if (output->buffers == NULL) {
+		fprintf(stderr, "allocation failed\n");
+		return;
+	}
 	output->wl_output = wl_output;
 	output->state = state;
 	output->scale = 1;
@@ -545,6 +550,7 @@ static void destroy_output(struct slurp_output *output) {
 	}
 	wl_output_destroy(output->wl_output);
 	free(output->logical_geometry.label);
+	free(output->buffers);
 	free(output);
 }
 

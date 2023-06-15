@@ -48,12 +48,7 @@ executable(
 	install: true,
 )
 
-install_headers([
-	'include/slurp.h',
-	'include/pool-buffer.h'
-	],
-	subdir : 'slurp'
-)
+install_headers('include/slurp.h', subdir : 'slurp')
 
 scdoc = find_program('scdoc', required: get_option('man-pages'))
 

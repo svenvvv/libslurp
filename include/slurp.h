@@ -5,7 +5,9 @@
 #include <stdint.h>
 #include <wayland-client.h>
 
-#include "pool-buffer.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct slurp_box {
 	int32_t x, y;
@@ -81,7 +83,7 @@ struct slurp_output {
 	bool configured;
 	bool dirty;
 	int32_t width, height;
-	struct pool_buffer buffers[2];
+	struct pool_buffer *buffers;
 	struct pool_buffer *current_buffer;
 
 	struct wl_cursor_theme *cursor_theme;
@@ -138,5 +140,8 @@ static inline bool slurp_box_intersect(const struct slurp_box *a, const struct s
 		a->height + a->y > b->y;
 }
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
