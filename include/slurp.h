@@ -6,10 +6,6 @@
 #include <wayland-client.h>
 
 #include "pool-buffer.h"
-#include "wlr-layer-shell-unstable-v1-client-protocol.h"
-#include "xdg-output-unstable-v1-client-protocol.h"
-
-#define TOUCH_ID_EMPTY -1
 
 struct slurp_box {
 	int32_t x, y;
@@ -57,6 +53,12 @@ struct slurp_state {
 	struct wl_list boxes; // slurp_box::link
 	bool fixed_aspect_ratio;
 	double aspect_ratio;  // h / w
+
+	const char *cursor_theme;
+	int cursor_size;
+
+	const char *error;
+	bool output_boxes;
 
 	struct slurp_box result;
 };
@@ -113,11 +115,28 @@ struct slurp_seat {
   	int32_t touch_id;
 };
 
-bool box_intersect(const struct slurp_box *a, const struct slurp_box *b);
-
 static inline struct slurp_selection *slurp_seat_current_selection(struct slurp_seat *seat) {
 	return seat->touch_selection.has_selection ?
 		&seat->touch_selection :
 		&seat->pointer_selection;
 }
+
+void slurp_state_init(struct slurp_state *state);
+
+int slurp_select(struct slurp_state *state);
+
+void slurp_destroy(struct slurp_state *state);
+
+struct slurp_output *slurp_output_from_box(const struct slurp_box *box, struct wl_list *outputs);
+
+void slurp_add_choice_box(struct slurp_state *state, const struct slurp_box *box);
+
+static inline bool slurp_box_intersect(const struct slurp_box *a, const struct slurp_box *b) {
+	return a->x < b->x + b->width &&
+		a->x + a->width > b->x &&
+		a->y < b->y + b->height &&
+		a->height + a->y > b->y;
+}
+
+
 #endif

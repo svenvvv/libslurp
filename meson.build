@@ -20,10 +20,10 @@ xkbcommon = dependency('xkbcommon')
 
 subdir('protocol')
 
-executable(
+libslurp = library(
 	'slurp',
 	[
-		'main.c',
+		'slurp.c',
 		'pool-buffer.c',
 		'render.c',
 		protos_src,
@@ -35,6 +35,15 @@ executable(
 		wayland_cursor,
 		xkbcommon,
 	],
+	include_directories: 'include',
+	install: true,
+
+)
+
+executable(
+	'slurp',
+	'main.c',
+	link_with: libslurp,
 	include_directories: 'include',
 	install: true,
 )

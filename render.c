@@ -37,7 +37,7 @@ void render(struct slurp_output *output) {
 	// Draw option boxes from input
 	struct slurp_box *choice_box;
 	wl_list_for_each(choice_box, &state->boxes, link) {
-		if (box_intersect(&output->logical_geometry,
+		if (slurp_box_intersect(&output->logical_geometry,
 					choice_box)) {
 			struct slurp_box b = *choice_box;
 			box_layout_to_output(&b, output);
@@ -55,7 +55,7 @@ void render(struct slurp_output *output) {
 			continue;
 		}
 
-		if (!box_intersect(&output->logical_geometry,
+		if (!slurp_box_intersect(&output->logical_geometry,
 			&current_selection->selection)) {
 			continue;
 		}
